@@ -24,3 +24,9 @@ public class Console {
         throw new UnsupportedOperationException("Unimplemented method 'fecharScanner'");
     }
 
+     public static void limparBuffer() {
+        throw new UnsupportedOperationException("Unimplemented method 'limparBuffer'");
+    }
+}
+
+
