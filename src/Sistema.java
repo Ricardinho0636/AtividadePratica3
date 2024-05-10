@@ -1,10 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Sistema {
     private static List<Funcionario> funcionarios = new ArrayList<>();
-    private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         boolean sair = false;
@@ -17,8 +15,8 @@ public class Sistema {
             System.out.println("4 - Buscar Funcionário por Nome ou Matrícula");
             System.out.println("5 - Sair");
 
-            int opcao = scanner.nextInt();
-            scanner.nextLine(); // Limpar o buffer do scanner
+            int opcao = Console.lerInt();
+            Console.limparBuffer();
 
             switch (opcao) {
                 case 1:
@@ -41,38 +39,37 @@ public class Sistema {
             }
         }
 
-        scanner.close();
+        Console.fecharScanner();
     }
 
     private static void adicionarFuncionario() {
         System.out.println("Digite o nome do funcionário:");
-        String nome = scanner.nextLine();
+        String nome = Console.lerString();
         System.out.println("Digite a matrícula do funcionário:");
-        String matricula = scanner.nextLine();
+        String matricula = Console.lerString();
 
         System.out.println("Selecione o tipo de funcionário:");
         System.out.println("1 - Gerente");
         System.out.println("2 - Desenvolvedor");
         System.out.println("3 - Estagiário");
 
-        int tipo = scanner.nextInt();
-        scanner.nextLine(); // Limpar o buffer do scanner
+        int tipo = Console.lerInt();
 
         switch (tipo) {
             case 1:
                 System.out.println("Digite o bônus anual do gerente:");
-                double bonusAnual = scanner.nextDouble();
+                double bonusAnual = Console.lerFloat();
                 funcionarios.add(new Gerente(nome, matricula, bonusAnual));
                 break;
             case 2:
                 System.out.println("Digite as tecnologias dominadas pelo desenvolvedor (separadas por vírgula):");
-                String tecnologiasInput = scanner.nextLine();
-                List<String> tecnologias = List(tecnologiasInput.split(","));
+                String tecnologiasInput = Console.lerString();
+                List<String> tecnologias = List.of(tecnologiasInput.split(","));
                 funcionarios.add(new Desenvolvedor(nome, matricula, tecnologias));
                 break;
             case 3:
                 System.out.println("Digite o número de horas trabalhadas pelo estagiário:");
-                int horasTrabalhadas = scanner.nextInt();
+                int horasTrabalhadas = Console.lerInt();
                 funcionarios.add(new Estagiario(nome, matricula, horasTrabalhadas));
                 break;
             default:
@@ -82,14 +79,9 @@ public class Sistema {
         System.out.println("Funcionário adicionado com sucesso.");
     }
 
-    private static List<String> List(String[] split) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'List'");
-    }
-
     private static void removerFuncionario() {
         System.out.println("Digite a matrícula do funcionário a ser removido:");
-        String matricula = scanner.nextLine();
+        String matricula = Console.lerString();
 
         boolean removido = funcionarios.removeIf(func -> func.getMatricula().equalsIgnoreCase(matricula));
         if (removido) {
@@ -100,13 +92,19 @@ public class Sistema {
     }
 
     private static void listarFuncionarios() {
-        System.out.println("Lista de Funcionários:");
-        funcionarios.forEach(func -> System.out.println(func.getNome() + " - " + func.getMatricula()));
+        if (funcionarios.isEmpty()) {
+            System.out.println("Nenhum funcionário cadastrado.");
+        } else {
+            System.out.println("Lista de Funcionários:");
+            for (Funcionario func : funcionarios) {
+                System.out.println(func.getNome() + " - " + func.getMatricula());
+            }
+        }
     }
 
     private static void buscarFuncionario() {
         System.out.println("Digite o nome ou matrícula do funcionário a ser buscado:");
-        String termoBusca = scanner.nextLine();
+        String termoBusca = Console.lerString();
 
         boolean encontrado = false;
         for (Funcionario func : funcionarios) {
